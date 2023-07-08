@@ -27,10 +27,16 @@ async function run() {
 
     //   finding data
     const toyCategoryData = client.db("carcorner").collection("carcategory");
-
+    const allToyData = client.db("carcorner").collection("alltoydata");
     app.get("/toycategory", async (req, res) => {
       const cursor = toyCategoryData.find();
       const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    app.post("/alltoy", async (req, res) => {
+      const alltoys = req.body;
+      const result = await allToyData.insertOne(alltoys);
       res.send(result);
     });
 
