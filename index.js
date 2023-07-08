@@ -34,11 +34,23 @@ async function run() {
       res.send(result);
     });
 
+    // app.get with email by data load
+    app.get("/alltoy", async (req, res) => {
+      let query = {};
+      if (req.query?.email) {
+        query = { sellerEmail: req.query.email };
+      }
+      const result = await allToyData.find(query).toArray();
+      res.send(result);
+    });
+
+    // all toy data
     app.post("/alltoy", async (req, res) => {
       const alltoys = req.body;
       const result = await allToyData.insertOne(alltoys);
       res.send(result);
     });
+    // alltoy with get
     app.get("/alltoy", async (req, res) => {
       const cursor = allToyData.find();
       const result = await cursor.toArray();
@@ -46,7 +58,6 @@ async function run() {
     });
 
     //specific toy get
-
     app.get("/alltoy/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
