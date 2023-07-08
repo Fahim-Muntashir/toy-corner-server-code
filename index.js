@@ -9,8 +9,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 app.use(cors());
 app.use(express.json());
 
-const uri =
-  "mongodb+srv://fahimasdf07:<password>@cluster1.p9ba0ek.mongodb.net/?retryWrites=true&w=majority";
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster1.p9ba0ek.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -28,6 +27,12 @@ async function run() {
 
     //   finding data
     const toyCategoryData = client.db("carcorner").collection("carcategory");
+
+    app.get("/toycategory", async (req, res) => {
+      const cursor = toyCategoryData.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
