@@ -87,6 +87,22 @@ async function run() {
     });
 
     // update a toy
+    app.put("/alltoy/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedToy = req.body;
+      delete updatedToy._id;
+      try {
+        const result = await allToyData.findOneAndUpdate(
+          { _id: new ObjectId(id) },
+          { $set: updatedToy },
+          { returnOriginal: false }
+        );
+        res.json(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to update toy" });
+      }
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
